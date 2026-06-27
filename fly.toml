@@ -1,0 +1,25 @@
+# Configuração de deploy no Fly.io.
+# O nome do app precisa ser único globalmente — ajuste "app" se necessário
+# (ex.: "votanime-caio") e rode `fly deploy`. Veja o README para o passo a passo.
+app = "votanime"
+primary_region = "gru" # São Paulo
+
+[build]
+
+[http_service]
+  internal_port = 80
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+# Volume persistente para o banco SQLite (storage/). Sem isso os votos
+# seriam perdidos a cada deploy.
+[[mounts]]
+  source = "votanime_data"
+  destination = "/rails/storage"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"

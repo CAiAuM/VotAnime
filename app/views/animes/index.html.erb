@@ -1,0 +1,50 @@
+<% content_for :title, "VotAnime — Melhor anime dos últimos 20 anos" %>
+
+<header class="hero">
+  <h1>VotAnime</h1>
+  <p>Qual é o <strong>melhor anime dos últimos 20 anos</strong>? Vote no seu favorito.</p>
+</header>
+
+<main class="grid" id="animes-grid" data-controller="voting" data-vote-base-url="/animes">
+  <% if @animes.empty? %>
+    <p class="empty">
+      Nenhum anime cadastrado ainda. Rode <code>bin/rails animes:import</code> para
+      buscar os dados na API e popular a lista.
+    </p>
+  <% end %>
+
+  <% @animes.each_with_index do |anime, index| %>
+    <article class="card" id="anime-<%= anime.id %>" data-anime-id="<%= anime.id %>" data-position="<%= index + 1 %>">
+      <div class="card__image" style="background-image: url('<%= anime.image_url %>');">
+        <span class="card__rank" data-rank>#<%= index + 1 %></span>
+      </div>
+
+      <div class="card__body">
+        <h2 class="card__title"><%= anime.title %><% if anime.year.present? %> <span class="card__year">(<%= anime.year %>)</span><% end %></h2>
+        <p class="card__synopsis"><%= anime.synopsis.presence || "Sinopse indisponível." %></p>
+
+        <button type="button" class="card__vote-btn" data-vote-button>Votar</button>
+
+        <div class="bar" title="Votos">
+          <div class="bar__fill" data-bar-fill style="width: <%= anime.vote_percentage %>%;"></div>
+          <span class="bar__label">
+            <span data-votes-count><%= number_with_delimiter(anime.votes_count) %></span>
+            / <%= number_with_delimiter(Anime::MAX_VOTES) %> votos
+          </span>
+        </div>
+      </div>
+    </article>
+  <% end %>
+</main>
+
+<!-- Popup de confirmação de voto -->
+<div class="modal" id="vote-modal" hidden>
+  <div class="modal__box" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <h3 id="modal-title">Confirmar voto</h3>
+    <p>Você deseja mesmo votar em <strong data-modal-anime-title></strong>?</p>
+    <div class="modal__actions">
+      <button type="button" class="btn btn--no" data-modal-no>Não</button>
+      <button type="button" class="btn btn--yes" data-modal-yes>Sim</button>
+    </div>
+  </div>
+</div>

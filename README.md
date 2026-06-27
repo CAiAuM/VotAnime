@@ -8,7 +8,11 @@ popup pede confirmação; ao confirmar, o voto é contabilizado, a barra é
 atualizada dinamicamente e a classificação (do **1º ao 100º lugar**) é
 reordenada na hora.
 
-Feito com **Ruby on Rails 8** + **ActiveRecord**, seguindo as convenções do Rails.
+Feito com **Ruby on Rails 8** + **ActiveRecord** (SQLite), seguindo as convenções
+do Rails. Há também uma **versão estática** publicada no GitHub Pages para
+demonstração (veja abaixo).
+
+🔗 **Demo online:** https://caiaum.github.io/VotAnime/
 
 ## Como funciona
 
@@ -43,40 +47,29 @@ Para rebuscar os dados direto da API Jikan (atualiza o banco e o snapshot):
 bin/rails animes:import
 ```
 
-## Deploy no Fly.io
+## Publicação no GitHub Pages (versão estática)
 
-O projeto já vem com `Dockerfile` (gerado pelo Rails 8) e `fly.toml` prontos.
-O banco SQLite fica em um volume persistente, e o `bin/docker-entrypoint`
-prepara e popula o banco automaticamente na primeira subida.
+O GitHub Pages só serve conteúdo **estático** (HTML/CSS/JS) — ele **não roda
+Rails**. Por isso, a pasta [`docs/`](docs/) contém uma versão estática do
+VotAnime, publicada em https://caiaum.github.io/VotAnime/.
 
-1. Instale o [flyctl](https://fly.io/docs/flyctl/install/) e faça login:
-   ```bash
-   fly auth login
-   ```
-2. Crie o app (o nome em `fly.toml` precisa ser único globalmente — ajuste se
-   necessário, ex.: `votanime-seunome`):
-   ```bash
-   fly apps create votanime
-   ```
-3. Crie o volume do banco na mesma região do `fly.toml` (`gru` = São Paulo):
-   ```bash
-   fly volumes create votanime_data --region gru --size 1
-   ```
-4. Configure a chave mestra do Rails como secret (o conteúdo de
-   `config/master.key`, que **não** vai para o Git):
-   ```bash
-   fly secrets set RAILS_MASTER_KEY=$(cat config/master.key)
-   ```
-5. Faça o deploy:
-   ```bash
-   fly deploy
-   ```
-6. Abra o site:
-   ```bash
-   fly open
-   ```
+Essa versão:
 
-Pronto — o site fica acessível publicamente pela URL `https://<app>.fly.dev`.
+- usa os mesmos dados de anime do snapshot `db/animes.json` (gerados em
+  `docs/animes.js`);
+- mostra os cards, a barra de votos, o botão **Votar** e o popup de confirmação;
+- contabiliza os votos **no próprio navegador** (via `localStorage`) e reordena o
+  ranking ao vivo. Como é client-side, os votos são locais a cada navegador e
+  podem ser zerados pelo botão "Zerar votos" — é uma demonstração, não um placar
+  global.
+
+Para publicar: em **Settings > Pages** do repositório, selecione a branch `master`
+e a pasta `/docs`. Para atualizar os dados, rode `bin/rails animes:import` e
+regenere `docs/animes.js` a partir de `db/animes.json`.
+
+> A aplicação Rails completa (com votos persistidos em banco) continua no
+> repositório e roda localmente conforme a seção acima. O `Dockerfile` gerado
+> pelo Rails 8 permite hospedá-la em plataformas que rodam containers.
 
 ## Licença
 

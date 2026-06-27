@@ -1,0 +1,199 @@
+:root {
+  --bg: #0f0f1a;
+  --bg-card: #1b1b2f;
+  --accent: #ff4d6d;
+  --accent-2: #7b2ff7;
+  --text: #f5f5fa;
+  --muted: #a0a0c0;
+  --bar-bg: #2a2a44;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: radial-gradient(circle at top, #1a1a35, var(--bg));
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.hero {
+  text-align: center;
+  padding: 3rem 1rem 1.5rem;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: 3rem;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -1px;
+}
+
+.hero p { color: var(--muted); font-size: 1.1rem; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 1.5rem;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--muted);
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(123, 47, 247, 0.35);
+}
+
+.card__image {
+  position: relative;
+  height: 360px;
+  background-size: cover;
+  background-position: center;
+  background-color: #000;
+}
+
+.card__rank {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.card__body {
+  padding: 1rem 1.1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  flex: 1;
+}
+
+.card__title { margin: 0; font-size: 1.25rem; line-height: 1.2; }
+.card__year { color: var(--muted); font-weight: 400; font-size: 0.9rem; }
+
+.card__synopsis {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card__vote-btn {
+  margin-top: auto;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.2s ease;
+}
+
+.card__vote-btn:hover { filter: brightness(1.1); }
+.card__vote-btn:disabled { opacity: 0.6; cursor: progress; }
+
+.bar {
+  position: relative;
+  background: var(--bar-bg);
+  border-radius: 999px;
+  height: 26px;
+  overflow: hidden;
+}
+
+.bar__fill {
+  height: 100%;
+  min-width: 2px;
+  background: linear-gradient(90deg, var(--accent-2), var(--accent));
+  border-radius: 999px;
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.bar__label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+}
+
+/* Modal de confirmação */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 1rem;
+}
+
+.modal[hidden] { display: none; }
+
+.modal__box {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 1.8rem;
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.modal__box h3 { margin-top: 0; }
+
+.modal__actions {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+  margin-top: 1.4rem;
+}
+
+.btn {
+  border: none;
+  padding: 0.65rem 1.6rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn--yes { background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: #fff; }
+.btn--no { background: var(--bar-bg); color: var(--text); }
+.btn:hover { filter: brightness(1.1); }
